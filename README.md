@@ -7,10 +7,8 @@ I'm writing this to use my existing Google AIY voice kit hardware to make a midi
 
 You will need the Google AIY voiice kit for a regular size Raspberry Pi and a 2 B+ or newer board (I used a 2 B+, this could possibly work on older hardware).
 
-### Installing
 
-
-## Authors
+### Authors
 
 * **Bill S** 
 
