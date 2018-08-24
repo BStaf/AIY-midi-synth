@@ -6,6 +6,8 @@ SoundFontFile = "/usr/share/sounds/sf2/drumSoundFonts/PremierKit.sf2"
 AiyBtnPin = 23
 AiyLedPin = 25
 
+btnPressStart = -1
+
 def initFluidSynth(soundFont):
     #start fluidsynth in the backround
     subprocess.Popen(["fluidsynth",
@@ -47,9 +49,10 @@ def lightBlink(count):
         GPIO.output(AiyLedPin, False)
         time.sleep(0.234)
 
-def onMidiAttachBtn(channel):
-    stopFluidSynth()
+def startAndAttachSynth():
     lightOff()
+    stopFluidSynth()
+    time.sleep(1)
     print("Start FluidSynth")
     initFluidSynth(SoundFontFile)
     time.sleep(7)
@@ -64,6 +67,21 @@ def onMidiAttachBtn(channel):
         lightBlink(3)
     print("Done")
 
+def handleBtnPress(channel):
+    global btnPressStart
+    if GPIO.input(channel) == 0:
+        btnPressStart = time.time()
+    if GPIO.input(channel) == 1:
+        if btnPressStart < 0:
+            return
+        elapsed = time.time() - btnPressStart
+        btnPressStart = -1
+        print(elapsed)
+        if elapsed < 1:
+            startAndAttachSynth()
+        elif elapsed > 2:
+            subprocess.call("sudo shutdown -h now", shell=True)
+                    
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(AiyBtnPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -72,7 +90,8 @@ GPIO.setup(AiyLedPin, GPIO.OUT)
 lightBlink(2)
 
 #onMidiAttachBtn(0)
-GPIO.add_event_detect(AiyBtnPin, GPIO.FALLING, callback=onMidiAttachBtn, bouncetime=12000)
+#GPIO.add_event_detect(AiyBtnPin, GPIO.FALLING, callback=onMidiAttachBtn, bouncetime=12000)
+GPIO.add_event_detect(AiyBtnPin, GPIO.BOTH, callback=handleBtnPress)
 
 while True:
         time.sleep(0.1)
