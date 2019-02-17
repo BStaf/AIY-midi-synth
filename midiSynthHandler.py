@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import subprocess
 import time
 
-SoundFontFile = "/usr/share/sounds/sf2/drumSoundFonts/PremierKit.sf2"
+SoundFontFile = "/home/pi/PremierKit.sf2"
 AiyBtnPin = 23
 AiyLedPin = 25
 
@@ -74,6 +74,7 @@ def handleBtnPress(channel):
     if GPIO.input(channel) == 1:
         if btnPressStart < 0:
             return
+        lightBlink(1)
         elapsed = time.time() - btnPressStart
         btnPressStart = -1
         print(elapsed)
