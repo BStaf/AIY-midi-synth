@@ -29,3 +29,8 @@ grep -q "dtoverlay=googlevoicehat-soundcard" /boot/config.txt || \
   echo "dtoverlay=googlevoicehat-soundcard" >> /boot/config.txt
 grep -q "dtparam=i2s=on" /boot/config.txt || \
   echo "dtparam=i2s=on" >> /boot/config.txt
+
+echo "Set rc.local to run script at startup"
+
+grep -q "python midiSynthHandler.py" /etc/rc.local || \
+  echo -e "python midiSynthHandler.py &"  >> /etc/rc.local
