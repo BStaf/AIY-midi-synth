@@ -31,6 +31,6 @@ grep -q "dtparam=i2s=on" /boot/config.txt || \
   echo "dtparam=i2s=on" >> /boot/config.txt
 
 echo "Set rc.local to run script at startup"
-
-grep -q "python midiSynthHandler.py" /etc/rc.local || \
-  echo -e "python midiSynthHandler.py &"  >> /etc/rc.local
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+grep -q "python $DIR/midiSynthHandler.py" /etc/rc.local || \
+  echo -e "python $DIR/midiSynthHandler.py &"  >> /etc/rc.local
