@@ -1,0 +1,11 @@
+#/bin/bash
+
+echo Installing Fluidsynth
+
+if hash fluidsynth 2>/dev/null; then
+	echo FluidSynth already installed
+else
+	sudo apt-get --assume-yes install fluidsynth
+fi
+
+
